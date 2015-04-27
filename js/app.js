@@ -24,6 +24,9 @@ var waveform_y = 150;
 
 var ctx_cepstrum;
 
+var num_plots = 5;
+var num_oscillators = 0;
+
 window.addEventListener('load', init, false);
 function init() {
     try {
@@ -59,12 +62,7 @@ function initCanvas() {
     ctx_spectrum = canvas.getContext('2d');
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
-    //canvas.width = window.innerWidth;
-    gradient = ctx_spectrum.createLinearGradient(0,0,0,canvas.height);
-    gradient.addColorStop(1,'#000000');
-    gradient.addColorStop(0.85,'#ff0000');
-    gradient.addColorStop(0.35,'#ffff00');
-    gradient.addColorStop(0,'#ffffff');
+    gradient = make_gradient();
 
     scriptProcessor = context.createScriptProcessor(1024);
     scriptProcessor.connect(context.destination);
@@ -115,6 +113,9 @@ function initCanvas() {
 }
 
 function drawOscilloscope() {
+    if (!document.getElementById("oscilloscope")){
+        return;
+    }
     var array = new Uint8Array(analyser2.frequencyBinCount);
     analyser2.getByteTimeDomainData(array);
     var canvas = ctx_oscilloscope.canvas;
@@ -139,7 +140,7 @@ function drawOscilloscope() {
 };
 
 function drawWaveform() {
-    if(!is_playing){
+    if(!is_playing || !document.getElementById("waveform")){
     //if (document.getElementById('player').paused){
         return;
     }
@@ -175,6 +176,9 @@ function drawWaveform() {
 };
 
 function drawSpectrum() {
+    if (!document.getElementById("spectrum")){
+        return;
+    }
     var array =  new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(array);
     ctx_spectrum.clearRect(0, 0, ctx_spectrum.canvas.width, ctx_spectrum.canvas.height);
@@ -187,7 +191,7 @@ function drawSpectrum() {
 };
 
 function drawSpectrogram() {
-    if (!is_playing) {
+    if (!is_playing || !document.getElementById("spectrogram")) {
     //if (document.getElementById('player').paused){
             return;
     }
@@ -220,7 +224,7 @@ function drawSpectrogram() {
 };
 
 function drawCepstrum() {
-    if (!is_playing) {
+    if (!is_playing || !document.getElementById("cepstrum")) {
             return;
     }
     var array =  new Uint8Array(analyser.frequencyBinCount);
@@ -236,16 +240,17 @@ function drawCepstrum() {
     ctx_cepstrum.clearRect(0, 0, ctx_cepstrum.canvas.width, ctx_cepstrum.canvas.height);
     ctx_cepstrum.fillStyle=gradient;
     for ( var i = 1; i < (mag_array.length/2); i++ ){
-        var value = ctx_cepstrum.canvas.height*mag_array[i]/256;
+        var value = 20 * Math.log(mag_array[i]) / Math.LN10;
 
         var binWidth = ctx_cepstrum.canvas.width/(analyser.frequencyBinCount/2);
-        ctx_cepstrum.fillRect(i*binWidth,ctx_cepstrum.canvas.height,binWidth*3/4,-value);
+        ctx_cepstrum.fillRect((i-1)*binWidth,ctx_cepstrum.canvas.height,binWidth*3/4,-value);
     }
 };
 
 $(document).ready(function(){
 
-    $('#file_form').hide();  
+    $('.form').hide();  
+    $('#tts_form').show();  
     $('#tab-nav li').click(function(e) {
         $('.form').hide();
         $('#tab-nav .current').removeClass("current");
@@ -301,6 +306,28 @@ $(document).ready(function(){
         return false;
     });
 
+    $('#add_oscillator').click(function () {
+        num_oscillators += 1;
+        var osc_elem = "<div name='osc"+num_oscillators+"'>"
+                        +"<select>"
+                            +"<option value='sine'>Sine</option>"
+                            +"<option value=square'>Square</option>"
+                            +"<option value='triangle'>Triange</option>"
+                            +"<option value='sawtooth'>Sawtooth</option>"
+                        +"</select>"
+                        +"<label for='"+num_oscillators+"_freq'>Frequency:</input>"
+                        +"<input type='number' id='"+num_oscillators+"_freq' value='440' min='0' max='50000' class='freq' />"
+                        +"<label for='"+num_oscillators+"_amp'>Amplitude:</input>"
+                        +"<input type='number' id='"+num_oscillators+"_amp' value='1' min='0' max='1' step='0.1' class='amp' />"
+                       +"</div>"
+        $('#oscillators').append(osc_elem);
+    });
+
+    $('#rem_oscillator').click(function () {
+        $('#oscillators').children().last().remove();
+        num_oscillators -= 1;
+    });
+
     $(document).on('keypress', function(e) {
         var tag = e.target.tagName.toLowerCase();
         if ( e.which === 32 && tag != 'input' && tag != 'textarea'){
@@ -318,6 +345,19 @@ $(document).ready(function(){
         }
     });
 
+    $('.remove_button').click(function() {
+       $(this).parent().remove(); 
+       num_plots -= 1;
+       percent = 100/num_plots;
+       $('.plot_wrapper').css({ 'height': 'calc('+percent+'% - ' + 15+ 'px)' });
+       ctx_oscilloscope.canvas.height = ctx_oscilloscope.canvas.offsetHeight;
+       ctx_waveform.canvas.height = ctx_waveform.canvas.offsetHeight;
+       ctx_spectrum.canvas.height = ctx_spectrum.canvas.offsetHeight;
+       ctx_spectrogram.canvas.height = ctx_spectrogram.canvas.offsetHeight;
+       tempCtx.canvas.height = ctx_spectrogram.canvas.offsetHeight;
+       ctx_cepstrum.canvas.height = ctx_cepstrum.canvas.offsetHeight;
+       gradient = make_gradient();
+    });
 });
 
 function handleFileSelect(evt) {
@@ -376,4 +416,13 @@ function start_audio(audioBuffer, start_time){
         is_playing = false;
         $('.button').val('\u25BA');
     }
+}
+
+function make_gradient(){
+    var grad = ctx_spectrum.createLinearGradient(0,0,0,ctx_spectrum.canvas.height);
+    grad.addColorStop(1,'#000000');
+    grad.addColorStop(0.85,'#ff0000');
+    grad.addColorStop(0.35,'#ffff00');
+    grad.addColorStop(0,'#ffffff');
+    return grad;
 }

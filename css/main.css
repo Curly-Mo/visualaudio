@@ -121,18 +121,37 @@ textarea:focus, input:focus, select:focus{
 }
 
 canvas{
+  position:absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.plot_wrapper {
+  position: relative;
   width: 100%;
   height: calc(20% - 15px);
   border:1px solid #000000;
-  padding-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 #canvas_wrapper {
+  position: relative;
   display: table-cell;
   width: 100%;
   height: 100%;
   vertical-align: top;
   padding: 2px 2px 25px 25px;
+}
+
+.remove_button {
+   position: absolute; 
+   top: 0px;
+   right: 0px;
+   z-index: 99;
+   opacity: 0.1;
+}
+.remove_button:hover {
+   opacity: 1.0;
 }
 
 #form_wrapper {
@@ -141,6 +160,7 @@ canvas{
   height: 100%;
 }
 .container {
+  position: relative;
   display: table;
   width: 100%;
   height: 100%;
