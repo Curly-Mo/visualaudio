@@ -97,6 +97,7 @@ function initEffects() {
 
     var compressor = {};
     compressor['node'] = context.createDynamicsCompressor();
+    compressor['node'].reduction.value = 0;
     effects['compressor'] = compressor;
 
     var delay = {};
@@ -528,8 +529,8 @@ $(document).ready(function(){
     $('#compressor_thresh').on('change', function(e) {
         effects['compressor']['node'].threshold.value = e.target.value;
     });
-    $('#compressor_knee').on('change', function(e) {
-        effects['compressor']['node'].knee.value = e.target.value;
+    $('#compressor_ratio').on('change', function(e) {
+        effects['compressor']['node'].ratio.value = e.target.value;
     });
     $('#delay_time').on('change', function(e) {
         effects['delay']['node'].delayTime.value = e.target.value;
