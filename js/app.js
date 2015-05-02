@@ -439,7 +439,7 @@ $(document).ready(function(){
     $('#rem_oscillator').click(function () {
         $('#oscillators').children().last().remove();
         var id = 'osc' + num_oscillators;
-        oscillators[id].stop();
+        oscillators[id].stop(0);
         delete oscillators[id];
         delete osc_gains[id];
 
