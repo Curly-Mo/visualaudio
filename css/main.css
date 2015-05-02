@@ -13,11 +13,30 @@ body{
   padding: 30px;
   width: 300px;
   float: left;
-  margin: 0 5 5 5;
   -moz-border-radius: 0 7px 7px 7px;
   -webkit-border-radius: 0 7px 7px 7px;
   border-radius: 0 7px 7px 7px;
   clear:left;
+}
+
+#effects-div {
+  background-color:rgba(72,72,72,0.4);
+  padding: 10px 30px 30px 30px;
+  width: 300px;
+  float: left;
+  margin: 30px 0 0 0;
+  -moz-border-radius: 0 7px 7px 7px;
+  -webkit-border-radius: 0 7px 7px 7px;
+  border-radius: 7px 7px 7px 7px;
+  clear:left;
+}
+
+.effect-div {
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  border:1px solid black;
+  padding: 5px;
 }
 
 input {
@@ -152,6 +171,11 @@ canvas{
 }
 .remove_button:hover {
    opacity: 1.0;
+}
+
+.plot_label {
+    position: absolute;
+    z-index: 10;
 }
 
 #form_wrapper {

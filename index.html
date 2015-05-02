@@ -14,6 +14,7 @@
                         <li><a href="#tts_form"><span>TTS</span></a></li>
                         <li><a href="#file_form"><span>Upload File</span></a></li>
                         <li><a href="#oscillator_form"><span>Oscillators</span></a></li>
+                        <li><a href="#mic"><span>Mic</span></a></li>
                     </ul>
                     <div id="form-div">
                         <form id="file_form" class="form">
@@ -47,7 +48,7 @@
                         <form id="oscillator_form" class="form">
                             <div id="oscillators"></div>
                             <button id="add_oscillator" type="button">Add</button>
-                            <button id="rem_oscillator" type="button">Remove</button> 
+                            <button id="rem_oscillator" type="button" style='display:none;'>Remove</button> 
                         </form>
                         <div>
                             <label for="loop">Loop?</label>
@@ -61,32 +62,89 @@
                                 <option value="128">128</option>
                                 <option value="256">256</option>
                                 <option value="512">512</option>
-                                <option value="1024" selected="selected">1024</option>
-                                <option value="2048">2048</option>
+                                <option value="1024">1024</option>
+                                <option value="2048" selected="selected">2048</option>
                             </select>
                         </div>
+                    </div>
+                    <div id="effects-div">
+                        <form id="effects_form">
+                            <div style="font-size: 20pt">Effects</div>
+                            <div class="effect-div">
+                                <label for="filter">Filter:</label>
+                                <input id="filter" name="filter" type="checkbox" class="effect" /> <br/>
+                                <label for="filter_type">Type:</label>
+                                <select id="filter_type" name="filter_type">
+                                    <option value="lowpass">Low-Pass</option>
+                                    <option value="highpass">High-Pass</option>
+                                    <option value="bandpass">Band-Pass</option>
+                                    <option value="lowshelf">Low-Shelf</option>
+                                    <option value="highshelf">High-Shelf</option>
+                                    <option value="peaking">Peaking</option>
+                                    <option value="notch">Notch</option>
+                                    <option value="allpass">All-Pass</option>
+                                </select><br/>
+                                <label for="filter_freq">Frequency:</label>
+                                <input id="filter_freq" name="filter_freq" type="range" value='350' min='20' max='20000' step='1'/> <br/>
+                                <label for="filter_Q">Q:</label>
+                                <input id="filter_Q" name="filter_Q" type="range" value='0.1' min='0.0001' max='100' step='1'/> 
+                            </div><br/>
+                            <div class="effect-div">
+                                <label for="compressor">Compression:</label>
+                                <input id="compressor" name="compressor" type="checkbox" class="effect" /> <br/>
+                                <label for="filter_thresh">Threshold:</label>
+                                <input id="compressor_thresh" name="compressor_thresh" type="range" value='-24' min='-100' max='0' step='1'/> <br/>
+                                <label for="filter_knee">Knee:</label>
+                                <input id="compressor_knee" name="compressor_knee" type="range" value='30' min='0' max='40' step='1'/> <br/>
+                            </div><br/>
+                            <div class="effect-div">
+                                <label for="delay">Delay:</label>
+                                <input id="delay" name="delay" type="checkbox" class="effect" /> <br/>
+                                <label for="delay_time">Time (secs):</label>
+                                <input id="delay_time" name="delay_time" type="number" value='0' min='0' max='5.0' step='0.1' /> <br/>
+                            </div>
+                            <div class="effect-div">
+                                <label for="convolver">Convolution Reverb:</label>
+                                <input id="convolver" name="convolver" type="checkbox" class="effect" /> <br/>
+                                <label for="impulse_response">Impulse Response:</label>
+                                <select id="impulse_response" name="impulse_response">
+                                    <option value="audio/Hall.wav">Hall</option>
+                                    <option value="audio/ArtGallery.wav">Art Gallery</option>
+                                    <option value="audio/YogaStudio.wav">Yoga Studio</option>
+                                    <option value="audio/RacquetballCourt.wav">Racquetball Court</option>
+                                    <option value="audio/QuantumHall.wav">Quantum Hall</option>
+                                    <option value="audio/SpaceEcho.wav">Space Echo</option>
+                                    <option value="audio/TimeSpace.wav">Time Space</option>
+                                </select><br/>
+                            </div>
+                        </form>
                     </div>
                     <!--<audio id="player" preload="auto" controls>Your browser does not support the audio element.</audio>-->
                 </div>
 
                 <div id="canvas_wrapper">
                     <div class="plot_wrapper">
+                        <span style="position: absolute;">Oscilloscope</span>
                         <button class='remove_button'>X</button>
                         <canvas id="oscilloscope"></canvas>
                     </div>
                     <div class="plot_wrapper">
+                        <span class="plot_label">Waveform</span>
                         <button class='remove_button'>X</button>
                         <canvas id="waveform"></canvas>
                     </div>
                     <div class="plot_wrapper">
+                        <span class="plot_label">Spectrum</span>
                         <button class='remove_button'>X</button>
                         <canvas id="spectrum"></canvas>
                     </div>
                     <div class="plot_wrapper">
+                        <span class="plot_label">Spectrogram</span>
                         <button class='remove_button'>X</button>
                         <canvas id="spectrogram"></canvas>
                     </div>
                     <div class="plot_wrapper">
+                        <span class="plot_label">Cepstrum</span>
                         <button class='remove_button'>X</button>
                         <canvas id="cepstrum"></canvas>
                     </div>
