@@ -130,7 +130,7 @@ textarea:focus, input:focus, select:focus{
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-weight:bold;
 }
-#tab-nav li.current{ 
+#tab-nav li.current{
     text-align:center;
     background-color:rgba(72,72,72,0.4);
 }
@@ -163,7 +163,7 @@ canvas{
 }
 
 .remove_button {
-   position: absolute; 
+   position: absolute;
    top: 0px;
    right: 0px;
    z-index: 99;
@@ -190,11 +190,4 @@ canvas{
   height: 100%;
   vertical-align: top;
   border-spacing: 5;
-}
-
-#player {
-  float: left;
-  margin-left: auto;
-  margin-right: 0;
-  clear: left;
 }
